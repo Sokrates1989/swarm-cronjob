@@ -5,7 +5,7 @@ Lightweight wrapper around the official [crazymax/swarm-cronjob](https://github.
 This repo gives you:
 
 - A small, configurable Swarm stack for the cron controller itself
-- A `.quick-start.sh` helper script to configure and deploy it
+- A `quick-start.sh` helper script to configure and deploy it
 
 Once deployed, `swarm-cronjob` watches your Swarm for services with special labels and starts tasks on a cron schedule.
 
@@ -42,17 +42,17 @@ LOG_JSON=false
 - `TZ` – timezone used for cron evaluation
 - `LOG_LEVEL` / `LOG_JSON` – logging format and verbosity
 
-You normally do **not** need to edit `swarm-compose.yml` directly; `.quick-start.sh` wires `.env` into it for you.
+You normally do **not** need to edit `swarm-compose.yml` directly; `quick-start.sh` wires `.env` into it for you.
 
 ---
 
-## 3. Quick Start (`.quick-start.sh`)
+## 3. Quick Start (`quick-start.sh`)
 
 From the repo root:
 
 ```bash
-chmod +x .quick-start.sh   # once
-./.quick-start.sh
+chmod +x quick-start.sh   # once
+./quick-start.sh
 ```
 
 The script will:
@@ -84,7 +84,7 @@ This is the recommended way to install and manage the cron controller.
 
 ## 4. Manual Deploy (optional)
 
-If you prefer not to use `.quick-start.sh`:
+If you prefer not to use `quick-start.sh`:
 
 ```bash
 cp .env.template .env               # or create .env manually

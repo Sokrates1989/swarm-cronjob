@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# .quick-start.sh
+# quick-start.sh
 #
 # Simple helper to configure and deploy the swarm-cronjob controller stack.
 # Supports two modes:
