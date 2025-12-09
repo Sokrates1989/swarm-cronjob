@@ -1,0 +1,13 @@
+services:
+  swarm-cronjob-test:
+    image: busybox:latest
+    command: sh -c 'date; echo "[swarm-cronjob test] job executed"; sleep 10'
+    deploy:
+      mode: replicated
+      replicas: 0
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=* * * * *"   # every minute
+        - "swarm.cronjob.skip-running=false"
+      restart_policy:
+        condition: none
