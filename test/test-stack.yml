@@ -1,7 +1,7 @@
 services:
   swarm-cronjob-test:
     image: busybox:latest
-    command: sh -c 'echo "[swarm-cronjob test] job executed at $(date +%Y:%m:%d\ %H:%M)"; sleep 10'
+    command: sh -c 'echo "[swarm-cronjob test] job executed at $$(date +%Y:%m:%d\ %H:%M)"; sleep 10'
     deploy:
       mode: replicated
       replicas: 0
