@@ -34,11 +34,13 @@ main() {
     echo "4) Show stack status"
     echo "5) Remove stack"
     echo ""
-    echo "6) Test service menu (cron demo)"
+    echo "6) Deploy test service (cron demo)"
+    echo "7) View logs of test service (cron demo)"
+    echo "8) Remove test service (cron demo)"
     echo ""
-    echo "7) Exit"
+    echo "9) Exit"
     echo ""
-    read -p "Your choice (1-7): " choice
+    read -p "Your choice (1-9): " choice
 
     case "$choice" in
       1) edit_env_manually ;;
@@ -46,8 +48,10 @@ main() {
       3) deploy_stack ;;
       4) show_status ;;
       5) remove_stack ;;
-      6) test_menu ;;
-      7) echo ""; echo "👋 Goodbye!"; exit 0 ;;
+      6) deploy_test_service ;;
+      7) view_test_logs ;;
+      8) remove_test_service ;;
+      9) echo ""; echo "👋 Goodbye!"; exit 0 ;;
       *) echo "❌ Invalid choice" ;;
     esac
   done
