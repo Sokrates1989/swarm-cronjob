@@ -1,14 +1,12 @@
-version: "3.2"
-
 services:
   swarm-cronjob:
-    image: crazymax/swarm-cronjob
+    image: ${IMAGE_NAME:-crazymax/swarm-cronjob}:${IMAGE_VERSION:-latest}
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      - "TZ=Europe/Berlin"
-      - "LOG_LEVEL=info"
-      - "LOG_JSON=false"
+      - "TZ=${TZ:-Europe/Berlin}"
+      - "LOG_LEVEL=${LOG_LEVEL:-info}"
+      - "LOG_JSON=${LOG_JSON:-false}"
     deploy:
       placement:
         constraints:
