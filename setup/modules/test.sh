@@ -64,12 +64,6 @@ remove_test_service() {
   test_stack="${base_stack}_test"
 
   echo ""
-  read -p "Remove test stack '$test_stack'? (y/N): " confirm
-  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-    echo "Cancelled."
-    return
-  fi
-
   docker stack rm "$test_stack" || true
   echo "✅ Removal of test stack requested. Wait for services to stop."
 }
