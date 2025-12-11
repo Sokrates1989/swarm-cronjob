@@ -1,2 +1,5 @@
 # Do not track environment and config variables.
 .env
+
+# .DS_Store files of macOS.
+.DS_Store
