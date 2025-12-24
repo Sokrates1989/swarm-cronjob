@@ -8,6 +8,10 @@ fi
 : "${QUICKSTART_ROOT:?QUICKSTART_ROOT is not set}"
 
 deploy_stack() {
+  # deploy_stack
+  # Deploys the configured swarm-cronjob stack.
+  # Notes:
+  # - Renders the compose file through docker-compose/docker compose to resolve ${VAR} substitutions.
   ensure_docker
   ensure_env_file
 
@@ -22,10 +26,29 @@ deploy_stack() {
   echo ""
   echo "🚀 Deploying stack '$stack_name' using $COMPOSE_FILE"
   echo ""
-  docker stack deploy -c "$COMPOSE_FILE" "$stack_name"
+
+  local compose_cmd
+  if command -v docker-compose >/dev/null 2>&1; then
+    compose_cmd=(docker-compose)
+  elif docker compose version >/dev/null 2>&1; then
+    compose_cmd=(docker compose)
+  else
+    echo "[WARN] Neither docker-compose nor 'docker compose' is available. Deploying raw compose file (env substitution may be incomplete)." >&2
+    docker stack deploy -c "$COMPOSE_FILE" "$stack_name"
+    return
+  fi
+
+  local compose_env_opt=()
+  if [ -f "$ENV_FILE" ]; then
+    compose_env_opt=(--env-file "$ENV_FILE")
+  fi
+
+  docker stack deploy -c <("${compose_cmd[@]}" -f "$COMPOSE_FILE" "${compose_env_opt[@]}" config) "$stack_name"
 }
 
 remove_stack() {
+  # remove_stack
+  # Removes the configured stack after confirmation.
   ensure_docker
   ensure_env_file
 
@@ -44,6 +67,8 @@ remove_stack() {
 }
 
 show_status() {
+  # show_status
+  # Displays the current stack status (docker stack services).
   ensure_docker
   ensure_env_file
   local stack

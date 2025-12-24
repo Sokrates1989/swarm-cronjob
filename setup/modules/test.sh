@@ -8,6 +8,10 @@ fi
 : "${QUICKSTART_ROOT:?QUICKSTART_ROOT is not set}"
 
 deploy_test_service() {
+  # deploy_test_service
+  # Deploys the test stack used to demonstrate cron scheduling.
+  # Notes:
+  # - Renders the compose file through docker-compose/docker compose to resolve ${VAR} substitutions.
   ensure_docker
   ensure_env_file
 
@@ -25,7 +29,24 @@ deploy_test_service() {
   echo "🚀 Deploying test stack '$test_stack' using $TEST_COMPOSE_FILE"
   echo "   This defines a simple busybox service that logs once per minute via swarm-cronjob."
   echo ""
-  docker stack deploy -c "$TEST_COMPOSE_FILE" "$test_stack"
+
+  local compose_cmd
+  if command -v docker-compose >/dev/null 2>&1; then
+    compose_cmd=(docker-compose)
+  elif docker compose version >/dev/null 2>&1; then
+    compose_cmd=(docker compose)
+  else
+    echo "[WARN] Neither docker-compose nor 'docker compose' is available. Deploying raw compose file (env substitution may be incomplete)." >&2
+    docker stack deploy -c "$TEST_COMPOSE_FILE" "$test_stack"
+    return
+  fi
+
+  local compose_env_opt=()
+  if [ -f "$ENV_FILE" ]; then
+    compose_env_opt=(--env-file "$ENV_FILE")
+  fi
+
+  docker stack deploy -c <("${compose_cmd[@]}" -f "$TEST_COMPOSE_FILE" "${compose_env_opt[@]}" config) "$test_stack"
 }
 
 view_test_logs() {
