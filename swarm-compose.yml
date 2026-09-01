@@ -1,13 +1,30 @@
 services:
   swarm-cronjob:
-    image: ${IMAGE_NAME:-crazymax/swarm-cronjob}:${IMAGE_VERSION:-latest}
+    image: ${IMAGE_NAME:-crazymax/swarm-cronjob}:${IMAGE_VERSION:-1.16.0}
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     environment:
       - "TZ=${TZ:-Europe/Berlin}"
       - "LOG_LEVEL=${LOG_LEVEL:-info}"
       - "LOG_JSON=${LOG_JSON:-false}"
     deploy:
+      mode: replicated
+      replicas: 1
       placement:
         constraints:
           - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 5s
+        failure_action: rollback
+        monitor: 30s
+        order: stop-first
+      rollback_config:
+        parallelism: 1
+        delay: 5s
+        monitor: 30s
+        order: stop-first

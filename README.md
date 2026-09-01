@@ -31,14 +31,14 @@ The stack is parameterized via `.env` (created from `.env.template`):
 ```env
 STACK_NAME=swarm_cronjob
 IMAGE_NAME=crazymax/swarm-cronjob
-IMAGE_VERSION=latest
+IMAGE_VERSION=1.16.0
 TZ=Europe/Berlin
 LOG_LEVEL=info
 LOG_JSON=false
 ```
 
 - `STACK_NAME` – Swarm stack name for the controller
-- `IMAGE_NAME` / `IMAGE_VERSION` – image and tag for the controller
+- `IMAGE_NAME` / `IMAGE_VERSION` – image and reviewed, non-`latest` tag for the controller
 - `TZ` – timezone used for cron evaluation
 - `LOG_LEVEL` / `LOG_JSON` – logging format and verbosity
 
@@ -95,6 +95,7 @@ docker stack deploy -c swarm-compose.yml "$STACK_NAME"
 ```
 
 The controller itself is defined in `swarm-compose.yml` using those env vars.
+Keep `IMAGE_VERSION` on a tested release; the repository defaults to `1.16.0`.
 
 ---
 
@@ -129,7 +130,7 @@ The actual service definition can be anything you like as long as:
 ```yaml
 services:
   my-periodic-job:
-    image: busybox
+    image: busybox:1.37.0
     command: date
     deploy:
       mode: replicated
@@ -150,3 +151,4 @@ As soon as this stack is deployed, the `swarm-cronjob` controller will start tas
 
 - This repo does **not** define any application-specific jobs; it only runs the controller.
 - Other Swarm stacks (e.g. a webscraper in `swarm-pricetracker`) are responsible for adding the labels shown above.
+- The controller needs Docker API write operations to start scheduled tasks. The socket's `:ro` mount flag prevents filesystem replacement but does not make Docker API access read-only. Treat the pinned controller image and manager node as high-trust infrastructure.

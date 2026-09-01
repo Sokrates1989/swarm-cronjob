@@ -19,7 +19,7 @@ ensure_env_file() {
     cat >"$ENV_FILE" <<'EOF'
 STACK_NAME=swarm_cronjob
 IMAGE_NAME=crazymax/swarm-cronjob
-IMAGE_VERSION=latest
+IMAGE_VERSION=1.16.0
 TZ=Europe/Berlin
 LOG_LEVEL=info
 LOG_JSON=false
@@ -81,27 +81,27 @@ guided_setup() {
   local cur_stack cur_image_name cur_image_version cur_tz cur_log_level cur_log_json
   cur_stack=$(get_env_value STACK_NAME "swarm_cronjob")
   cur_image_name=$(get_env_value IMAGE_NAME "crazymax/swarm-cronjob")
-  cur_image_version=$(get_env_value IMAGE_VERSION "latest")
+  cur_image_version=$(get_env_value IMAGE_VERSION "1.16.0")
   cur_tz=$(get_env_value TZ "Europe/Berlin")
   cur_log_level=$(get_env_value LOG_LEVEL "info")
   cur_log_json=$(get_env_value LOG_JSON "false")
 
-  read -p "Stack name [$cur_stack]: " val
+  read -r -p "Stack name [$cur_stack]: " val
   update_env_value STACK_NAME "${val:-$cur_stack}"
 
-  read -p "Image name [$cur_image_name]: " val
+  read -r -p "Image name [$cur_image_name]: " val
   update_env_value IMAGE_NAME "${val:-$cur_image_name}"
 
-  read -p "Image version [$cur_image_version]: " val
+  read -r -p "Image version [$cur_image_version]: " val
   update_env_value IMAGE_VERSION "${val:-$cur_image_version}"
 
-  read -p "Timezone TZ [$cur_tz]: " val
+  read -r -p "Timezone TZ [$cur_tz]: " val
   update_env_value TZ "${val:-$cur_tz}"
 
-  read -p "Log level [$cur_log_level]: " val
+  read -r -p "Log level [$cur_log_level]: " val
   update_env_value LOG_LEVEL "${val:-$cur_log_level}"
 
-  read -p "Log JSON (true/false) [$cur_log_json]: " val
+  read -r -p "Log JSON (true/false) [$cur_log_json]: " val
   update_env_value LOG_JSON "${val:-$cur_log_json}"
 
   echo ""
@@ -112,7 +112,7 @@ show_current_config() {
   local stack image_name image_version tz log_level log_json
   stack=$(get_env_value STACK_NAME "swarm_cronjob")
   image_name=$(get_env_value IMAGE_NAME "crazymax/swarm-cronjob")
-  image_version=$(get_env_value IMAGE_VERSION "latest")
+  image_version=$(get_env_value IMAGE_VERSION "1.16.0")
   tz=$(get_env_value TZ "Europe/Berlin")
   log_level=$(get_env_value LOG_LEVEL "info")
   log_json=$(get_env_value LOG_JSON "false")
